@@ -6,10 +6,7 @@ import br.com.albertopaim.apirest.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,5 +32,18 @@ public class ProductController {
         return new ResponseEntity<Object>(produto.get(), HttpStatus.OK);
     }
 
+    @PostMapping
+    public ResponseEntity<Object> criarProduto(@RequestBody Product product){
+        if(product.getName() == null){
+            return HandlerResponse.generateResponse("Nome do produto obrigatório", HttpStatus.BAD_REQUEST);
+        }
+
+        if(product.getPrice() == null){
+            return HandlerResponse.generateResponse("Preço do produto obrigatório", HttpStatus.BAD_REQUEST);
+        }
+
+        Product newProduct = productRepository.save(product);
+        return new ResponseEntity<Object>(newProduct, HttpStatus.CREATED);
+    }
 
 }
