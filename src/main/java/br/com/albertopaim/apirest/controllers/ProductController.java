@@ -1,5 +1,6 @@
 package br.com.albertopaim.apirest.controllers;
 
+import br.com.albertopaim.apirest.Utils.HandlerResponse;
 import br.com.albertopaim.apirest.models.Product;
 import br.com.albertopaim.apirest.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +26,14 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> obterProduto(@PathVariable Integer id) {
+    public ResponseEntity<Object> obterProduto(@PathVariable Integer id) {
         Optional<Product> produto = productRepository.findById(id);
 
         if(!(produto.isPresent())){
-            return ResponseEntity.notFound().build();
+            return HandlerResponse.generateResponse("Produto não encontrado", HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<Product>(produto.get(), HttpStatus.OK);
-
+        return new ResponseEntity<Object>(produto.get(), HttpStatus.OK);
     }
+
 
 }
